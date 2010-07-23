@@ -1,11 +1,20 @@
 mongo_graph
 
 Kenny Gorman
-www.kennygorman.com
+http://www.kennygorman.com
 
 Description:
-A utility to create RRD graphs using the http interface of MongoDB to fetch data.  
-This is best used with some utility to view the RRD graphs like drraw (http://web.taranis.org/drraw/).
+A utility to create RRD graphs using the http interface of MongoDB to fetch data and place it into rrd files
+for historical trending information.
+  
+This is best used with some utility to view the RRD graphs like drraw.
+
+Requirements:
+- python 2.4+
+- rrdtool with python extensions (http://oss.oetiker.ch/rrdtool/)
+
+Suggested:
+- drraw (http://web.taranis.org/drraw/)
 
 Configuration:
 
