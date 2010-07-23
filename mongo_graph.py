@@ -1,7 +1,7 @@
 #
 # mongo_graph: a mongo -> rrd creation program
 # best used with something like drraw for display of the rrd's
-# v.2b
+# v.3b
 # 2010 Kenny Gorman
 #
 
@@ -19,26 +19,45 @@ class mongoGraph:
         self.printStats()
         
     # pull data from web interface
-    def getdata(host,port,type,db):
+    def getdata(host,port,name,db):
+        port=port+1000  # mongodb always uses this port for stats
         names=[]
         values=[]
-        if (type == 'disk'): 
-            url="http://"+host+":28017/"+db+"/$cmd/?filter_dbstats=1&limit=1"
+        if (name == "disk"): 
+            print "%s: gathering %s stats" % (host,name)
+            url="http://%s:%s/%s/$cmd/?filter_dbstats=1&limit=1" % (host,port,db)
             data = json.loads(urllib.urlopen(url).read())
             names =  data['rows'][0].keys()
             values = data['rows'][0].values()
-        if (type == 'repl'):
-            url="http://"+host+":28017/_status?repl=2"
+        if (name == "repl"):
+            print "%s: gathering %s stats" % (host,name)
+            url="http://%s:%s/_status?repl=2" % (host,port)
             data = json.loads(urllib.urlopen(url).read())
             mydata=data["serverStatus"]["repl"]["sources"]
             for i in mydata:
                 names.append(i['host'].split(':')[0])
                 values.append(i['lagSeconds'])
-        if (type == 'opcounters'):
-            url="http://"+host+":28017/_status"
+        if (name == "opcounters"):
+            print "%s: gathering %s stats" % (host,name)
+            url="http://%s:%s/_status" % (host,port)
             data = urllib.urlopen(url).read()
             names = json.loads(data)["serverStatus"]["opcounters"].keys()
             values = json.loads(data)["serverStatus"]["opcounters"].values()
+        if (name == "mem"):
+            print "%s: gathering %s stats" % (host,name)
+            url="http://%s:%s/_status" % (host,port)
+            data = urllib.urlopen(url).read()
+            names = json.loads(data)["serverStatus"]["mem"].keys()
+            values = json.loads(data)["serverStatus"]["mem"].values()
+        if (name == "backgroundFlushing"):
+            print "%s: gathering %s stats" % (host,name)
+            url="http://%s:%s/_status" % (host,port)
+            data = urllib.urlopen(url).read()
+            names = json.loads(data)["serverStatus"]["backgroundFlushing"].keys()
+            values = json.loads(data)["serverStatus"]["backgroundFlushing"].values()
+            names.pop(0)    # remove the first item because it's a dict
+            values.pop(0)   # remove the first item because it's a dict
+            
         return names,values
         
     def setSignalHandler(self):
