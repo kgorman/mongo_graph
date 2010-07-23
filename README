@@ -1,0 +1,16 @@
+mongo_graph
+
+Kenny Gorman
+www.kennygorman.com
+
+Description:
+A utility to create RRD graphs using the http interface of MongoDB to fetch data.  
+This is best used with some utility to view the RRD graphs like drraw (http://web.taranis.org/drraw/).
+
+Configuration:
+
+Edit the settings.py file for the hosts you want to probe and alter the directories for your system.  See comments
+in the file for what the various options do. 
+
+Usage:
+./start_graphs.sh
