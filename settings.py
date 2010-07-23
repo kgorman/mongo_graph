@@ -1,11 +1,16 @@
 #
-# generic settings
+# settings file
 #
+# This is the path to rrdtool binaries
 rrdpython_path='/home/kgorman/rrdtool/lib/python2.6/site-packages/'
-hosts={'al02':27017,
-       'al01':27017,
-       'mdb02.internal.shutterfly.com':27017,
-       'mdb01.internal.shutterfly.com':27017
+
+# An array of hosts:ports to probe
+hosts={'myserver1':27017,
+       'myserver2':27017
 }
+
+# the metrics to fetch, no other options than listed here
 metrics={'disk':'GAUGE','opcounters':'COUNTER','repl':'GAUGE'}
+
+# where to save the rrd files.
 filepath='/home/kgorman/apache/cgi-bin/'
