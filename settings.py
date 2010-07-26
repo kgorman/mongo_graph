@@ -10,7 +10,7 @@ hosts={'myserver1':27017,
 }
 
 # the metrics to fetch, no other options than listed here
-metrics={'disk':'GAUGE','opcounters':'COUNTER','repl':'GAUGE','mem':'GAUGE','backgroundFlushing':'COUNTER'}
+metrics={'disk':'GAUGE','opcounters':'COUNTER','repl':'GAUGE','mem':'GAUGE','backgroundFlushing':'COUNTER','connections':'GAUGE'}
 
 # where to save the rrd files.
 filepath='/home/kgorman/apache/cgi-bin/'

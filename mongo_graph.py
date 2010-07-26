@@ -23,14 +23,13 @@ class mongoGraph:
         port=port+1000  # mongodb always uses this port for stats
         names=[]
         values=[]
+        print "%s: gathering %s stats" % (host,name)
         if (name == "disk"): 
-            print "%s: gathering %s stats" % (host,name)
             url="http://%s:%s/%s/$cmd/?filter_dbstats=1&limit=1" % (host,port,db)
             data = json.loads(urllib.urlopen(url).read())
             names =  data['rows'][0].keys()
             values = data['rows'][0].values()
         if (name == "repl"):
-            print "%s: gathering %s stats" % (host,name)
             url="http://%s:%s/_status?repl=2" % (host,port)
             data = json.loads(urllib.urlopen(url).read())
             mydata=data["serverStatus"]["repl"]["sources"]
@@ -38,26 +37,28 @@ class mongoGraph:
                 names.append(i['host'].split(':')[0])
                 values.append(i['lagSeconds'])
         if (name == "opcounters"):
-            print "%s: gathering %s stats" % (host,name)
             url="http://%s:%s/_status" % (host,port)
             data = urllib.urlopen(url).read()
             names = json.loads(data)["serverStatus"]["opcounters"].keys()
             values = json.loads(data)["serverStatus"]["opcounters"].values()
         if (name == "mem"):
-            print "%s: gathering %s stats" % (host,name)
             url="http://%s:%s/_status" % (host,port)
             data = urllib.urlopen(url).read()
             names = json.loads(data)["serverStatus"]["mem"].keys()
             values = json.loads(data)["serverStatus"]["mem"].values()
         if (name == "backgroundFlushing"):
-            print "%s: gathering %s stats" % (host,name)
             url="http://%s:%s/_status" % (host,port)
             data = urllib.urlopen(url).read()
             names = json.loads(data)["serverStatus"]["backgroundFlushing"].keys()
             values = json.loads(data)["serverStatus"]["backgroundFlushing"].values()
             names.pop(0)    # remove the first item because it's a dict
             values.pop(0)   # remove the first item because it's a dict
-            
+        if (name == "connections"):
+            url="http://%s:%s/_status" % (host,port)
+            data = urllib.urlopen(url).read()
+            names = json.loads(data)["serverStatus"]["connections"].keys()
+            values = json.loads(data)["serverStatus"]["connections"].values()
+           
         return names,values
         
     def setSignalHandler(self):
